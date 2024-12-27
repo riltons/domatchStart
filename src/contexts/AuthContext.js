@@ -1,68 +1,104 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../services/supabaseClient'; // Importar o cliente Supabase
+import { createContext, useContext, useState } from 'react';
+import { supabase } from '../services/supabaseClient';
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
+  const login = async (email, password) => {
+    console.log('Tentando fazer login com:', { email, password });
+    if (!email || !password) {
+      console.error('Email ou senha não fornecidos');
+      return { user: null, error: { message: 'Email ou senha não fornecidos' } };
     }
-  }, [user]);
-
-  const login = async (userData) => {
-    const { user, error } = await supabase.auth.signIn({
-      email: userData.email,
-      password: userData.password,
-    });
-
-    if (error) {
-      console.error('Erro ao fazer login:', error.message);
-      return false;
+    
+    try {
+      console.log('Dados enviados para autenticação:', { email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password 
+      });
+      
+      console.log('Resposta do Supabase:', { data, error });
+      
+      if (error) {
+        console.error('Erro ao fazer login:', error.message);
+        return { user: null, error };
+      }
+      
+      if (data?.user) {
+        setUser(data.user);
+        console.log('Usuário autenticado:', data.user);
+        return { user: data.user, error: null };
+      } else {
+        console.error('Usuário não encontrado');
+        return { user: null, error: { message: 'Usuário não encontrado' } };
+      }
+    } catch (error) {
+      console.error('Erro inesperado:', error);
+      return { user: null, error };
     }
-
-    setUser(user);
-    return true;
   };
 
   const register = async (userData) => {
-    const { user, error } = await supabase.auth.signUp({
-      email: userData.email,
-      password: userData.password,
-    });
-
-    if (error) {
-      console.error('Erro ao registrar:', error.message);
-      return false;
+    console.log('Tentando registrar usuário com:', userData);
+    const { email, password } = userData;
+    
+    try {
+      const { data, error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+          data: {
+            name: userData.name
+          }
+        }
+      });
+      
+      if (error) {
+        console.error('Erro ao registrar:', error.message);
+        return { user: null, error };
+      }
+      
+      if (data?.user) {
+        setUser(data.user);
+        return { user: data.user, error: null };
+      } else {
+        return { user: null, error: { message: 'Erro ao criar usuário' } };
+      }
+    } catch (error) {
+      console.error('Erro inesperado:', error);
+      return { user: null, error };
     }
-
-    setUser(user);
-    return true;
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      setUser(null);
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      throw error;
+    }
+  };
+
+  // Teste de registro de um novo usuário
+  const testRegister = async () => {
+    const testUser = { email: 'uniqueuser@example.com', password: '123456' }; // Novo usuário para teste
+    const { user, error } = await supabase.auth.signUp(testUser);
+    console.log('Teste de registro:', { user, error });
+    if (error) {
+      console.error('Erro ao registrar no teste:', error.message); // Log detalhado do erro
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, testRegister }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
+export const useAuth = () => useContext(AuthContext);

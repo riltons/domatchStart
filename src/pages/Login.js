@@ -11,15 +11,19 @@ function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    const success = login(formData);
-    if (success) {
-      navigate('/');
+    console.log('Tentando fazer login com:', formData);
+
+    const { user, error } = await login(formData.email, formData.password);
+    console.log('Resultado do login:', { user, error });
+
+    if (user) {
+      navigate('/dashboard');
     } else {
-      setError('Email ou senha incorretos');
+      setError(error?.message || 'Erro ao fazer login. Verifique suas credenciais.');
     }
   };
 

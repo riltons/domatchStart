@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import Layout from '../components/Layout';
 import GameModal from '../components/GameModal';
 import ChampionsModal from '../components/ChampionsModal';
 import { 
@@ -551,400 +552,402 @@ function CompetitionDetails() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      {/* Botão Voltar */}
-      <div className="mb-4">
-        <Link
-          to="/competitions"
-          className="inline-flex items-center text-gray-600 hover:text-gray-900"
-        >
-          <ArrowLeftIcon className="h-5 w-5 mr-2" />
-          Voltar
-        </Link>
-      </div>
+    <Layout>
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Botão Voltar */}
+        <div className="mb-4">
+          <Link
+            to="/competitions"
+            className="inline-flex items-center text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Voltar
+          </Link>
+        </div>
 
-      {/* Cabeçalho da Competição */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-start">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-gray-900">{competition?.name}</h1>
-            <p className="text-gray-600">{competition?.description}</p>
-            <div className="flex items-center text-sm text-gray-500">
-              <CalendarIcon className="h-5 w-5 mr-2" />
-              {new Date(competition?.date).toLocaleDateString('pt-BR')}
+        {/* Cabeçalho da Competição */}
+        <div className="bg-white shadow rounded-lg p-6">
+          <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-start">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-gray-900">{competition?.name}</h1>
+              <p className="text-gray-600">{competition?.description}</p>
+              <div className="flex items-center text-sm text-gray-500">
+                <CalendarIcon className="h-5 w-5 mr-2" />
+                {new Date(competition?.date).toLocaleDateString('pt-BR')}
+              </div>
+              <div className="flex items-center text-sm text-gray-500">
+                <UsersIcon className="h-5 w-5 mr-2" />
+                {competition?.players?.length || 0} jogadores
+              </div>
+              <div className="flex items-center text-sm text-gray-500">
+                <RectangleStackIcon className="h-5 w-5 mr-2" />
+                {games.length} jogos
+              </div>
             </div>
-            <div className="flex items-center text-sm text-gray-500">
-              <UsersIcon className="h-5 w-5 mr-2" />
-              {competition?.players?.length || 0} jogadores
-            </div>
-            <div className="flex items-center text-sm text-gray-500">
-              <RectangleStackIcon className="h-5 w-5 mr-2" />
-              {games.length} jogos
-            </div>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <Link
-              to={`/competitions/${id}/stats`}
-              className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full md:w-auto"
-            >
-              <ChartBarIcon className="h-5 w-5 mr-2 text-gray-500" />
-              Ver Estatísticas
-            </Link>
-            {competition && competition.status === null && (
-              <button
-                onClick={handleStartCompetition}
-                disabled={!competition.players || competition.players.length < 4}
-                className={`inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white w-full md:w-auto ${
-                  !competition.players || competition.players.length < 4
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-                }`}
-                title={!competition.players || competition.players.length < 4 ? 'É necessário ter pelo menos 4 jogadores para iniciar a competição' : ''}
+            <div className="flex flex-col space-y-2">
+              <Link
+                to={`/competitions/${id}/stats`}
+                className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full md:w-auto"
               >
-                <ClockIcon className="h-5 w-5 mr-2" />
-                Iniciar Competição
-              </button>
-            )}
-            {competition && competition.status === 'in_progress' && (
-              <button
-                onClick={handleFinishCompetition}
-                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 w-full md:w-auto"
-              >
-                <TrophyIcon className="h-5 w-5 mr-2" />
-                Encerrar Competição
-              </button>
-            )}
+                <ChartBarIcon className="h-5 w-5 mr-2 text-gray-500" />
+                Ver Estatísticas
+              </Link>
+              {competition && competition.status === null && (
+                <button
+                  onClick={handleStartCompetition}
+                  disabled={!competition.players || competition.players.length < 4}
+                  className={`inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white w-full md:w-auto ${
+                    !competition.players || competition.players.length < 4
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                  }`}
+                  title={!competition.players || competition.players.length < 4 ? 'É necessário ter pelo menos 4 jogadores para iniciar a competição' : ''}
+                >
+                  <ClockIcon className="h-5 w-5 mr-2" />
+                  Iniciar Competição
+                </button>
+              )}
+              {competition && competition.status === 'in_progress' && (
+                <button
+                  onClick={handleFinishCompetition}
+                  className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 w-full md:w-auto"
+                >
+                  <TrophyIcon className="h-5 w-5 mr-2" />
+                  Encerrar Competição
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Seção de Campeões (apenas para competições finalizadas) */}
-      {competition.status === 'finished' && (
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
-          <div className="flex items-center mb-6">
-            <TrophyIcon className="h-8 w-8 text-yellow-500 mr-2" />
-            <h2 className="text-xl font-semibold text-gray-900">Campeões da Competição</h2>
-          </div>
+        {/* Seção de Campeões (apenas para competições finalizadas) */}
+        {competition.status === 'finished' && (
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
+            <div className="flex items-center mb-6">
+              <TrophyIcon className="h-8 w-8 text-yellow-500 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">Campeões da Competição</h2>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Pódio de Jogadores */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Pódio Individual</h3>
-              <div className="space-y-4">
-                {calculateChampions().topPlayers.map((player, index) => (
-                  <div
-                    key={player.id}
-                    className={`flex items-center justify-between p-4 rounded-lg ${
-                      index === 0 ? 'bg-yellow-50 border border-yellow-200' :
-                      index === 1 ? 'bg-gray-50 border border-gray-200' :
-                      'bg-orange-50 border border-orange-200'
-                    }`}
-                  >
-                    <div className="flex items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
-                        index === 0 ? 'bg-yellow-100 text-yellow-600' :
-                        index === 1 ? 'bg-gray-100 text-gray-600' :
-                        'bg-orange-100 text-orange-600'
-                      }`}>
-                        {index === 0 ? '1º' : index === 1 ? '2º' : '3º'}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Pódio de Jogadores */}
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Pódio Individual</h3>
+                <div className="space-y-4">
+                  {calculateChampions().topPlayers.map((player, index) => (
+                    <div
+                      key={player.id}
+                      className={`flex items-center justify-between p-4 rounded-lg ${
+                        index === 0 ? 'bg-yellow-50 border border-yellow-200' :
+                        index === 1 ? 'bg-gray-50 border border-gray-200' :
+                        'bg-orange-50 border border-orange-200'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
+                          index === 0 ? 'bg-yellow-100 text-yellow-600' :
+                          index === 1 ? 'bg-gray-100 text-gray-600' :
+                          'bg-orange-100 text-orange-600'
+                        }`}>
+                          {index === 0 ? '1º' : index === 1 ? '2º' : '3º'}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{player.name}</p>
+                          <p className="text-sm text-gray-500">
+                            {player.wins} vitórias · {player.points} pontos
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{player.name}</p>
-                        <p className="text-sm text-gray-500">
-                          {player.wins} vitórias · {player.points} pontos
-                        </p>
+                      {index === 0 && (
+                        <TrophyIcon className="h-6 w-6 text-yellow-400" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dupla Campeã */}
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Dupla Campeã</h3>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <TrophyIcon className="h-10 w-10 text-yellow-400" />
+                    <div className="text-right">
+                      <p className="text-sm text-yellow-600 font-medium">CAMPEÕES</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {calculateChampions().topTeam.players.join(' & ')}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 mt-4">
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500">Vitórias</p>
+                      <p className="text-lg font-semibold text-gray-900">
+                        {calculateChampions().topTeam.wins}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500">Jogos</p>
+                      <p className="text-lg font-semibold text-gray-900">
+                        {calculateChampions().topTeam.gamesPlayed}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500">Pontos</p>
+                      <p className="text-lg font-semibold text-gray-900">
+                        {calculateChampions().topTeam.points}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Estatísticas da Dupla */}
+                <div className="mt-4 bg-white border border-gray-200 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Aproveitamento</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <div className="flex justify-between text-sm text-gray-600 mb-1">
+                        <span>Vitórias</span>
+                        <span>{Math.round((calculateChampions().topTeam.wins / calculateChampions().topTeam.gamesPlayed) * 100)}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-green-500 h-2 rounded-full"
+                          style={{
+                            width: `${(calculateChampions().topTeam.wins / calculateChampions().topTeam.gamesPlayed) * 100}%`
+                          }}
+                        />
                       </div>
                     </div>
-                    {index === 0 && (
-                      <TrophyIcon className="h-6 w-6 text-yellow-400" />
-                    )}
+                    <div>
+                      <div className="flex justify-between text-sm text-gray-600 mb-1">
+                        <span>Média de Pontos</span>
+                        <span>{(calculateChampions().topTeam.points / calculateChampions().topTeam.gamesPlayed).toFixed(1)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Lista de Jogos */}
+        <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
+          <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium text-gray-900">
+                Jogos da Competição
+              </h3>
+              {competition?.status === 'in_progress' && (
+                <button
+                  onClick={() => setShowGameModal(true)}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Novo Jogo
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="border-t border-gray-200">
+            {games.length === 0 ? (
+              <div className="p-4 text-center text-gray-500">
+                Nenhum jogo registrado ainda.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 p-4">
+                {games.map((game) => (
+                  <div key={`game_${game.id}_${game.gameNumber}`} className="bg-white shadow rounded-lg p-4">
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-semibold text-gray-900">
+                          Jogo #{formatGameNumber(game.gameNumber)}
+                        </span>
+                        <span className={`text-sm px-2 py-1 rounded-full ${
+                          game.completed 
+                            ? 'bg-green-100 text-green-800'
+                            : game.started
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {game.completed 
+                            ? 'Finalizado' 
+                            : game.started
+                              ? 'Em andamento'
+                              : 'Não Iniciado'}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col space-y-3">
+                        <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                          <span className="text-sm">
+                            {formatTeamNames(game.team1)}
+                          </span>
+                          <span className={`text-lg font-bold ${game.winner === 1 ? 'text-green-600' : ''}`}>
+                            {game.score1}
+                          </span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                          <span className="text-sm">
+                            {formatTeamNames(game.team2)}
+                          </span>
+                          <span className={`text-lg font-bold ${game.winner === 2 ? 'text-green-600' : ''}`}>
+                            {game.score2}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end mt-2">
+                        <button
+                          onClick={() => navigate(`/games/${game.id}`)}
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                          Ver Detalhes
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Dupla Campeã */}
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Dupla Campeã</h3>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <TrophyIcon className="h-10 w-10 text-yellow-400" />
-                  <div className="text-right">
-                    <p className="text-sm text-yellow-600 font-medium">CAMPEÕES</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {calculateChampions().topTeam.players.join(' & ')}
-                    </p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-4 mt-4">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Vitórias</p>
-                    <p className="text-lg font-semibold text-gray-900">
-                      {calculateChampions().topTeam.wins}
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Jogos</p>
-                    <p className="text-lg font-semibold text-gray-900">
-                      {calculateChampions().topTeam.gamesPlayed}
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Pontos</p>
-                    <p className="text-lg font-semibold text-gray-900">
-                      {calculateChampions().topTeam.points}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Estatísticas da Dupla */}
-              <div className="mt-4 bg-white border border-gray-200 rounded-lg p-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Aproveitamento</h4>
-                <div className="space-y-2">
-                  <div>
-                    <div className="flex justify-between text-sm text-gray-600 mb-1">
-                      <span>Vitórias</span>
-                      <span>{Math.round((calculateChampions().topTeam.wins / calculateChampions().topTeam.gamesPlayed) * 100)}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-green-500 h-2 rounded-full"
-                        style={{
-                          width: `${(calculateChampions().topTeam.wins / calculateChampions().topTeam.gamesPlayed) * 100}%`
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm text-gray-600 mb-1">
-                      <span>Média de Pontos</span>
-                      <span>{(calculateChampions().topTeam.points / calculateChampions().topTeam.gamesPlayed).toFixed(1)}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Lista de Jogos */}
-      <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
-        <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium text-gray-900">
-              Jogos da Competição
-            </h3>
-            {competition?.status === 'in_progress' && (
-              <button
-                onClick={() => setShowGameModal(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Novo Jogo
-              </button>
             )}
           </div>
         </div>
-        <div className="border-t border-gray-200">
-          {games.length === 0 ? (
-            <div className="p-4 text-center text-gray-500">
-              Nenhum jogo registrado ainda.
+
+        {/* Lista de Jogadores */}
+        <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium text-gray-900">
+                Jogadores da Competição
+              </h3>
+              <button
+                onClick={() => setIsAddPlayerModalOpen(true)}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Adicionar Jogador
+              </button>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 p-4">
-              {games.map((game) => (
-                <div key={`game_${game.id}_${game.gameNumber}`} className="bg-white shadow rounded-lg p-4">
-                  <div className="flex flex-col space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-semibold text-gray-900">
-                        Jogo #{formatGameNumber(game.gameNumber)}
-                      </span>
-                      <span className={`text-sm px-2 py-1 rounded-full ${
-                        game.completed 
-                          ? 'bg-green-100 text-green-800'
-                          : game.started
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {game.completed 
-                          ? 'Finalizado' 
-                          : game.started
-                            ? 'Em andamento'
-                            : 'Não Iniciado'}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-col space-y-3">
-                      <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                        <span className="text-sm">
-                          {formatTeamNames(game.team1)}
-                        </span>
-                        <span className={`text-lg font-bold ${game.winner === 1 ? 'text-green-600' : ''}`}>
-                          {game.score1}
-                        </span>
-                      </div>
-                      
-                      <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                        <span className="text-sm">
-                          {formatTeamNames(game.team2)}
-                        </span>
-                        <span className={`text-lg font-bold ${game.winner === 2 ? 'text-green-600' : ''}`}>
-                          {game.score2}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end mt-2">
+          </div>
+          <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Lista de Jogadores da Competição */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Jogadores Participantes</h4>
+              <div className="space-y-2">
+                {players.length === 0 ? (
+                  <p className="text-gray-500 text-sm">Nenhum jogador na competição.</p>
+                ) : (
+                  players.map(player => (
+                    <div
+                      key={player.id}
+                      className="flex justify-between items-center p-2 bg-gray-50 rounded"
+                    >
+                      <span>{player.name}</span>
                       <button
-                        onClick={() => navigate(`/games/${game.id}`)}
-                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        onClick={() => handleRemovePlayer(player.id)}
+                        className="text-red-600 hover:text-red-800 text-sm"
                       >
-                        Ver Detalhes
+                        Remover
                       </button>
                     </div>
-                  </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Lista de Jogadores Disponíveis */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Jogadores Disponíveis</h4>
+              <div className="space-y-2">
+                {availablePlayers.length === 0 ? (
+                  <p className="text-gray-500 text-sm">Nenhum jogador disponível.</p>
+                ) : (
+                  availablePlayers.map(player => (
+                    <div
+                      key={player.id}
+                      className="flex justify-between items-center p-2 bg-gray-50 rounded"
+                    >
+                      <span>{player.name}</span>
+                      <button
+                        onClick={() => handleAddPlayer(player.id)}
+                        className="text-blue-600 hover:text-blue-800 text-sm"
+                      >
+                        Adicionar
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal de Adicionar Jogador */}
+        {isAddPlayerModalOpen && (
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg max-w-md w-full p-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Adicionar Jogador
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="playerName" className="block text-sm font-medium text-gray-700">
+                    Nome do Jogador
+                  </label>
+                  <input
+                    type="text"
+                    id="playerName"
+                    value={newPlayerName}
+                    onChange={(e) => setNewPlayerName(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Lista de Jogadores */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium text-gray-900">
-              Jogadores da Competição
-            </h3>
-            <button
-              onClick={() => setIsAddPlayerModalOpen(true)}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Adicionar Jogador
-            </button>
-          </div>
-        </div>
-        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Lista de Jogadores da Competição */}
-          <div>
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Jogadores Participantes</h4>
-            <div className="space-y-2">
-              {players.length === 0 ? (
-                <p className="text-gray-500 text-sm">Nenhum jogador na competição.</p>
-              ) : (
-                players.map(player => (
-                  <div
-                    key={player.id}
-                    className="flex justify-between items-center p-2 bg-gray-50 rounded"
+                <div>
+                  <label htmlFor="playerPhone" className="block text-sm font-medium text-gray-700">
+                    Telefone
+                  </label>
+                  <input
+                    type="text"
+                    id="playerPhone"
+                    value={newPlayerPhone}
+                    onChange={(e) => setNewPlayerPhone(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setIsAddPlayerModalOpen(false)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
                   >
-                    <span>{player.name}</span>
-                    <button
-                      onClick={() => handleRemovePlayer(player.id)}
-                      className="text-red-600 hover:text-red-800 text-sm"
-                    >
-                      Remover
-                    </button>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          {/* Lista de Jogadores Disponíveis */}
-          <div>
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Jogadores Disponíveis</h4>
-            <div className="space-y-2">
-              {availablePlayers.length === 0 ? (
-                <p className="text-gray-500 text-sm">Nenhum jogador disponível.</p>
-              ) : (
-                availablePlayers.map(player => (
-                  <div
-                    key={player.id}
-                    className="flex justify-between items-center p-2 bg-gray-50 rounded"
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleCreatePlayer}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
                   >
-                    <span>{player.name}</span>
-                    <button
-                      onClick={() => handleAddPlayer(player.id)}
-                      className="text-blue-600 hover:text-blue-800 text-sm"
-                    >
-                      Adicionar
-                    </button>
-                  </div>
-                ))
-              )}
+                    Adicionar
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Modal de Jogo */}
+        <GameModal
+          isOpen={showGameModal}
+          onClose={() => setShowGameModal(false)}
+          onSubmit={handleCreateGame}
+          players={players}
+        />
+
+        {/* Modal de Campeões */}
+        <ChampionsModal
+          isOpen={showChampionsModal}
+          onClose={() => setShowChampionsModal(false)}
+          champions={champions}
+        />
       </div>
-
-      {/* Modal de Adicionar Jogador */}
-      {isAddPlayerModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Adicionar Jogador
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="playerName" className="block text-sm font-medium text-gray-700">
-                  Nome do Jogador
-                </label>
-                <input
-                  type="text"
-                  id="playerName"
-                  value={newPlayerName}
-                  onChange={(e) => setNewPlayerName(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label htmlFor="playerPhone" className="block text-sm font-medium text-gray-700">
-                  Telefone
-                </label>
-                <input
-                  type="text"
-                  id="playerPhone"
-                  value={newPlayerPhone}
-                  onChange={(e) => setNewPlayerPhone(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => setIsAddPlayerModalOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleCreatePlayer}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-                >
-                  Adicionar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal de Jogo */}
-      <GameModal
-        isOpen={showGameModal}
-        onClose={() => setShowGameModal(false)}
-        onSubmit={handleCreateGame}
-        players={players}
-      />
-
-      {/* Modal de Campeões */}
-      <ChampionsModal
-        isOpen={showChampionsModal}
-        onClose={() => setShowChampionsModal(false)}
-        champions={champions}
-      />
-    </div>
+    </Layout>
   );
 }
 

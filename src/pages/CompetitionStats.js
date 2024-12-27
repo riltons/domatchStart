@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { UserGroupIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Layout from '../components/Layout';
 
 export default function CompetitionStats() {
   const { id } = useParams();
@@ -144,100 +145,102 @@ export default function CompetitionStats() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Cabeçalho */}
-      <div className="mb-8">
-        <Link
-          to={`/competitions/${id}`}
-          className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4"
-        >
-          <ArrowLeftIcon className="h-5 w-5 mr-2" />
-          Voltar para a Competição
-        </Link>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">{competition.name}</h1>
-        <p className="text-gray-600">Estatísticas Detalhadas</p>
-      </div>
-
-      {/* Estatísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Ranking de Jogadores */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="flex items-center mb-6">
-            <UserGroupIcon className="h-6 w-6 text-gray-500 mr-2" />
-            <h2 className="text-lg font-medium text-gray-900">Ranking de Jogadores</h2>
-          </div>
-          <div className="space-y-4">
-            {stats.playerStats.map((player, index) => (
-              <div key={player.name} className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center">
-                    <span className="text-lg font-semibold text-gray-900 mr-2">#{index + 1}</span>
-                    <span className="text-sm font-medium text-gray-900">{player.name}</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-sm text-green-600 font-medium">{player.wins}V</span>
-                    <span className="text-sm text-red-600 font-medium">{player.losses}D</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-4 text-sm text-gray-500">
-                  <div>
-                    <span className="block text-gray-400">Jogos</span>
-                    <span className="font-medium">{player.gamesPlayed}</span>
-                  </div>
-                  <div>
-                    <span className="block text-gray-400">Pontos</span>
-                    <span className="font-medium">{player.points}</span>
-                  </div>
-                  <div>
-                    <span className="block text-gray-400">Média</span>
-                    <span className="font-medium">{(player.points / player.gamesPlayed).toFixed(1)}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+    <Layout>
+      <div className="container mx-auto px-4 py-8">
+        {/* Cabeçalho */}
+        <div className="mb-8">
+          <Link
+            to={`/competitions/${id}`}
+            className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4"
+          >
+            <ArrowLeftIcon className="h-5 w-5 mr-2" />
+            Voltar para a Competição
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{competition.name}</h1>
+          <p className="text-gray-600">Estatísticas Detalhadas</p>
         </div>
 
-        {/* Ranking de Duplas */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="flex items-center mb-6">
-            <UserGroupIcon className="h-6 w-6 text-gray-500 mr-2" />
-            <h2 className="text-lg font-medium text-gray-900">Ranking de Duplas</h2>
+        {/* Estatísticas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Ranking de Jogadores */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <div className="flex items-center mb-6">
+              <UserGroupIcon className="h-6 w-6 text-gray-500 mr-2" />
+              <h2 className="text-lg font-medium text-gray-900">Ranking de Jogadores</h2>
+            </div>
+            <div className="space-y-4">
+              {stats.playerStats.map((player, index) => (
+                <div key={player.name} className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center">
+                      <span className="text-lg font-semibold text-gray-900 mr-2">#{index + 1}</span>
+                      <span className="text-sm font-medium text-gray-900">{player.name}</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-sm text-green-600 font-medium">{player.wins}V</span>
+                      <span className="text-sm text-red-600 font-medium">{player.losses}D</span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 text-sm text-gray-500">
+                    <div>
+                      <span className="block text-gray-400">Jogos</span>
+                      <span className="font-medium">{player.gamesPlayed}</span>
+                    </div>
+                    <div>
+                      <span className="block text-gray-400">Pontos</span>
+                      <span className="font-medium">{player.points}</span>
+                    </div>
+                    <div>
+                      <span className="block text-gray-400">Média</span>
+                      <span className="font-medium">{(player.points / player.gamesPlayed).toFixed(1)}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="space-y-4">
-            {stats.teamStats.map((team, index) => (
-              <div key={team.players.join('-')} className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center">
-                    <span className="text-lg font-semibold text-gray-900 mr-2">#{index + 1}</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {team.players.join(' & ')}
-                    </span>
+
+          {/* Ranking de Duplas */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <div className="flex items-center mb-6">
+              <UserGroupIcon className="h-6 w-6 text-gray-500 mr-2" />
+              <h2 className="text-lg font-medium text-gray-900">Ranking de Duplas</h2>
+            </div>
+            <div className="space-y-4">
+              {stats.teamStats.map((team, index) => (
+                <div key={team.players.join('-')} className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center">
+                      <span className="text-lg font-semibold text-gray-900 mr-2">#{index + 1}</span>
+                      <span className="text-sm font-medium text-gray-900">
+                        {team.players.join(' & ')}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-sm text-green-600 font-medium">{team.wins}V</span>
+                      <span className="text-sm text-red-600 font-medium">{team.losses}D</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-sm text-green-600 font-medium">{team.wins}V</span>
-                    <span className="text-sm text-red-600 font-medium">{team.losses}D</span>
+                  <div className="grid grid-cols-3 gap-4 text-sm text-gray-500">
+                    <div>
+                      <span className="block text-gray-400">Jogos</span>
+                      <span className="font-medium">{team.gamesPlayed}</span>
+                    </div>
+                    <div>
+                      <span className="block text-gray-400">Pontos</span>
+                      <span className="font-medium">{team.points}</span>
+                    </div>
+                    <div>
+                      <span className="block text-gray-400">Média</span>
+                      <span className="font-medium">{(team.points / team.gamesPlayed).toFixed(1)}</span>
+                    </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4 text-sm text-gray-500">
-                  <div>
-                    <span className="block text-gray-400">Jogos</span>
-                    <span className="font-medium">{team.gamesPlayed}</span>
-                  </div>
-                  <div>
-                    <span className="block text-gray-400">Pontos</span>
-                    <span className="font-medium">{team.points}</span>
-                  </div>
-                  <div>
-                    <span className="block text-gray-400">Média</span>
-                    <span className="font-medium">{(team.points / team.gamesPlayed).toFixed(1)}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

@@ -13,7 +13,7 @@ function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -29,12 +29,12 @@ function Register() {
     }
 
     const { confirmPassword, ...userData } = formData;
-    const success = register(userData);
+    const { user, error: registerError } = await register(userData);
     
-    if (success) {
-      navigate('/');
+    if (user) {
+      navigate('/dashboard');
     } else {
-      setError('Este email já está em uso');
+      setError(registerError?.message || 'Erro ao criar conta. Tente novamente.');
     }
   };
 

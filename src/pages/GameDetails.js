@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import GameResultModal from '../components/GameResultModal';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Layout from '../components/Layout';
 
 const resultTypes = [
   { id: 'simple', points: 1, label: 'Batida Simples' },
@@ -445,172 +446,174 @@ function GameDetails() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center text-gray-600 hover:text-gray-800 mb-6"
-      >
-        <ArrowLeftIcon className="h-5 w-5 mr-2" />
-        Voltar
-      </button>
+    <Layout>
+      <div className="container mx-auto px-4 py-8">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-gray-600 hover:text-gray-800 mb-6"
+        >
+          <ArrowLeftIcon className="h-5 w-5 mr-2" />
+          Voltar
+        </button>
 
-      <div className="bg-white shadow rounded-lg p-6">
-        {/* Placar Principal */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="flex items-center justify-between w-full">
-            <div className="text-center flex-1">
-              <h3 className="text-lg font-semibold mb-2">{team1Name}</h3>
-              <div className="text-4xl font-bold text-blue-600">{animatedScore1}</div>
+        <div className="bg-white shadow rounded-lg p-6">
+          {/* Placar Principal */}
+          <div className="flex flex-col items-center mb-6">
+            <div className="flex items-center justify-between w-full">
+              <div className="text-center flex-1">
+                <h3 className="text-lg font-semibold mb-2">{team1Name}</h3>
+                <div className="text-4xl font-bold text-blue-600">{animatedScore1}</div>
+              </div>
+              <div className="text-2xl font-bold text-gray-400 px-4">VS</div>
+              <div className="text-center flex-1">
+                <h3 className="text-lg font-semibold mb-2">{team2Name}</h3>
+                <div className="text-4xl font-bold text-blue-600">{animatedScore2}</div>
+              </div>
             </div>
-            <div className="text-2xl font-bold text-gray-400 px-4">VS</div>
-            <div className="text-center flex-1">
-              <h3 className="text-lg font-semibold mb-2">{team2Name}</h3>
-              <div className="text-4xl font-bold text-blue-600">{animatedScore2}</div>
-            </div>
+
+            {/* Destaques do Jogo */}
+            {game?.completed && game?.highlight && (
+              <div className={`mt-4 p-4 rounded-lg text-center w-full ${
+                game.highlight === 'buchuda' 
+                  ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-300'
+                  : 'bg-purple-100 text-purple-800 border-2 border-purple-300'
+              }`}>
+                <div className="text-2xl mb-2">
+                  {game.highlight === 'buchuda' ? '🏆 Buchuda!' : '🔄 Buchuda de Ré!'}
+                </div>
+                <p className="text-lg">
+                  {game.highlight === 'buchuda'
+                    ? `${game.highlightTeam === 1 ? team1Name : team2Name} venceu sem deixar o adversário pontuar!`
+                    : `${game.highlightTeam === 1 ? team1Name : team2Name} conseguiu uma virada histórica após estar perdendo de 5x0!`}
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Destaques do Jogo */}
-          {game?.completed && game?.highlight && (
-            <div className={`mt-4 p-4 rounded-lg text-center w-full ${
-              game.highlight === 'buchuda' 
-                ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-300'
-                : 'bg-purple-100 text-purple-800 border-2 border-purple-300'
-            }`}>
-              <div className="text-2xl mb-2">
-                {game.highlight === 'buchuda' ? '🏆 Buchuda!' : '🔄 Buchuda de Ré!'}
+          {/* Status do Jogo */}
+          <div className="mt-6 w-full">
+            {game?.completed ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-semibold text-green-900 mb-2">
+                  Jogo Encerrado!
+                </h3>
+                <p className="text-green-700">
+                  Vencedor: {game.winner === 1 ? team1Name : team2Name}
+                </p>
+                <p className="text-green-700">
+                  Placar Final: {animatedScore1} x {animatedScore2}
+                </p>
               </div>
-              <p className="text-lg">
-                {game.highlight === 'buchuda'
-                  ? `${game.highlightTeam === 1 ? team1Name : team2Name} venceu sem deixar o adversário pontuar!`
-                  : `${game.highlightTeam === 1 ? team1Name : team2Name} conseguiu uma virada histórica após estar perdendo de 5x0!`}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Status do Jogo */}
-        <div className="mt-6 w-full">
-          {game?.completed ? (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-semibold text-green-900 mb-2">
-                Jogo Encerrado!
-              </h3>
-              <p className="text-green-700">
-                Vencedor: {game.winner === 1 ? team1Name : team2Name}
-              </p>
-              <p className="text-green-700">
-                Placar Final: {animatedScore1} x {animatedScore2}
-              </p>
-            </div>
-          ) : !game?.started ? (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="text-lg font-semibold text-yellow-800 mb-2">
-                    Jogo não iniciado
-                  </h3>
-                  <p className="text-yellow-700">
-                    Clique no botão ao lado para iniciar o jogo
-                  </p>
+            ) : !game?.started ? (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+                      Jogo não iniciado
+                    </h3>
+                    <p className="text-yellow-700">
+                      Clique no botão ao lado para iniciar o jogo
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleStartGame}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-md font-medium transition-colors"
+                  >
+                    Iniciar Jogo
+                  </button>
                 </div>
-                <button
-                  onClick={handleStartGame}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-md font-medium transition-colors"
-                >
-                  Iniciar Jogo
-                </button>
               </div>
-            </div>
-          ) : (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <p className="text-blue-700">
-                Jogo em andamento - Partida {formatGameNumber(game?.matches?.length || 0)} de no máximo 6
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Partida Atual */}
-      {game?.started && !game?.completed && (
-        <div className="bg-blue-50 border-2 border-blue-200 p-4 rounded-lg my-6">
-          <div className="flex justify-between items-center">
-            <div className="font-medium">Partida Atual: {formatGameNumber((game.matches?.length || 0) + 1)}</div>
-            <button
-              onClick={() => setIsResultModalOpen(true)}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Resultado
-            </button>
+            ) : (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <p className="text-blue-700">
+                  Jogo em andamento - Partida {formatGameNumber(game?.matches?.length || 0)} de no máximo 6
+                </p>
+              </div>
+            )}
           </div>
         </div>
-      )}
 
-      {/* Partidas Anteriores */}
-      <div className="bg-white shadow rounded-lg p-6 mt-6">
-        <h3 className="text-lg font-semibold mb-4">Partidas Anteriores</h3>
-        {game?.started && game?.matches && game?.matches.length > 0 ? (
-          game.matches.map((match) => (
-            <div
-              key={`match-${game.id}-${match.number}`}
-              className="bg-gray-100 p-4 rounded-lg mb-3"
-            >
-              <div className="flex justify-between items-center">
-                <div className="font-medium">
-                  Partida {formatGameNumber(match.number)}
+        {/* Partida Atual */}
+        {game?.started && !game?.completed && (
+          <div className="bg-blue-50 border-2 border-blue-200 p-4 rounded-lg my-6">
+            <div className="flex justify-between items-center">
+              <div className="font-medium">Partida Atual: {formatGameNumber((game.matches?.length || 0) + 1)}</div>
+              <button
+                onClick={() => setIsResultModalOpen(true)}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Resultado
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Partidas Anteriores */}
+        <div className="bg-white shadow rounded-lg p-6 mt-6">
+          <h3 className="text-lg font-semibold mb-4">Partidas Anteriores</h3>
+          {game?.started && game?.matches && game?.matches.length > 0 ? (
+            game.matches.map((match) => (
+              <div
+                key={`match-${game.id}-${match.number}`}
+                className="bg-gray-100 p-4 rounded-lg mb-3"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="font-medium">
+                    Partida {formatGameNumber(match.number)}
+                  </div>
+                  <div className="font-semibold">
+                    <span className={match.team1Score > match.team2Score ? 'text-green-600' : ''}>
+                      {match.team1Score}
+                    </span>
+                    {' - '}
+                    <span className={match.team2Score > match.team1Score ? 'text-green-600' : ''}>
+                      {match.team2Score}
+                    </span>
+                  </div>
                 </div>
-                <div className="font-semibold">
-                  <span className={match.team1Score > match.team2Score ? 'text-green-600' : ''}>
-                    {match.team1Score}
-                  </span>
-                  {' - '}
-                  <span className={match.team2Score > match.team1Score ? 'text-green-600' : ''}>
-                    {match.team2Score}
-                  </span>
-                </div>
-              </div>
-              {match.result && (
-                <div className="mt-2 space-y-1">
-                  {match.result.type === 'draw' ? (
-                    <div className="text-yellow-600 font-medium">
-                      Empate - Próxima partida terá ponto extra!
-                    </div>
-                  ) : (
-                    <>
-                      <div className="text-gray-700">
-                        <span className="font-medium">
-                          {match.result.winningTeam === 1 ? team1Name : team2Name}
-                        </span>
-                        {' venceu com '}
-                        <span className="font-medium text-blue-600">
-                          {resultTypes.find(t => t.id === match.result.type)?.label}
-                        </span>
+                {match.result && (
+                  <div className="mt-2 space-y-1">
+                    {match.result.type === 'draw' ? (
+                      <div className="text-yellow-600 font-medium">
+                        Empate - Próxima partida terá ponto extra!
                       </div>
-                      {match.result.hasExtraPoint && (
-                        <div className="text-green-600 text-sm font-medium">
-                          +1 ponto extra por empate anterior
+                    ) : (
+                      <>
+                        <div className="text-gray-700">
+                          <span className="font-medium">
+                            {match.result.winningTeam === 1 ? team1Name : team2Name}
+                          </span>
+                          {' venceu com '}
+                          <span className="font-medium text-blue-600">
+                            {resultTypes.find(t => t.id === match.result.type)?.label}
+                          </span>
                         </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">Nenhuma partida jogada ainda.</p>
+                        {match.result.hasExtraPoint && (
+                          <div className="text-green-600 text-sm font-medium">
+                            +1 ponto extra por empate anterior
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">Nenhuma partida jogada ainda.</p>
+          )}
+        </div>
+
+        {game && (
+          <GameResultModal
+            isOpen={isResultModalOpen}
+            onClose={() => setIsResultModalOpen(false)}
+            onSubmit={handleMatchSubmit}
+            game={game}
+          />
         )}
       </div>
-
-      {game && (
-        <GameResultModal
-          isOpen={isResultModalOpen}
-          onClose={() => setIsResultModalOpen(false)}
-          onSubmit={handleMatchSubmit}
-          game={game}
-        />
-      )}
-    </div>
+    </Layout>
   );
 }
 
