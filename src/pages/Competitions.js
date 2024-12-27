@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Layout } from '../components/Layout';
+import Layout from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { competitionService } from '../services/competitionService';
 import { playerService } from '../services/playerService';
