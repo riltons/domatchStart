@@ -4,8 +4,7 @@ export const competitionService = {
   async getCompetitions() {
     const { data, error } = await supabase
       .from('competitions')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('*');
     
     if (error) {
       console.error('Erro ao buscar competições:', error);
@@ -18,8 +17,7 @@ export const competitionService = {
     const { data, error } = await supabase
       .from('competitions')
       .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+      .eq('user_id', userId);
     
     if (error) {
       console.error('Erro ao buscar competições do usuário:', error);

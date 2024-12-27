@@ -4,8 +4,7 @@ export const playerService = {
   async getPlayers() {
     const { data, error } = await supabase
       .from('players')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('*');
     
     if (error) {
       console.error('Erro ao buscar jogadores:', error);
@@ -18,8 +17,7 @@ export const playerService = {
     const { data, error } = await supabase
       .from('players')
       .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+      .eq('user_id', userId);
     
     if (error) {
       console.error('Erro ao buscar jogadores do usuário:', error);
@@ -39,9 +37,7 @@ export const playerService = {
           nome,
           apelido,
           celular,
-          user_id,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          user_id
         }])
         .select();
       
@@ -66,8 +62,7 @@ export const playerService = {
         .update({
           nome,
           apelido,
-          celular,
-          updated_at: new Date().toISOString()
+          celular
         })
         .eq('id', id)
         .select();
