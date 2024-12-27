@@ -15,7 +15,7 @@ function Players() {
 
   const loadPlayers = async () => {
     try {
-      const data = await playerService.getPlayers();
+      const data = await playerService.getPlayersByUser(user.id);
       setPlayers(data);
     } catch (error) {
       console.error('Erro ao carregar jogadores:', error);
@@ -29,8 +29,10 @@ function Players() {
         user_id: user.id
       });
       setPlayers([...players, newPlayer]);
+      closeModal();
     } catch (error) {
       console.error('Erro ao adicionar jogador:', error);
+      alert('Erro ao adicionar jogador. Por favor, tente novamente.');
     }
   };
 
