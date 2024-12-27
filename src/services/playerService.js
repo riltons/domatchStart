@@ -14,6 +14,10 @@ export const playerService = {
   },
 
   async getPlayersByUser(userId) {
+    if (!userId) {
+      throw new Error('userId é obrigatório');
+    }
+
     const { data, error } = await supabase
       .from('players')
       .select('*')
@@ -28,9 +32,15 @@ export const playerService = {
 
   async addPlayer(playerData) {
     try {
+      // Validar dados
+      if (!playerData.nome) throw new Error('Nome é obrigatório');
+      if (!playerData.user_id) throw new Error('user_id é obrigatório');
+
       // Garantir que temos os campos corretos
-      const { nome, apelido, celular, user_id } = playerData;
+      const { nome, apelido = null, celular = null, user_id } = playerData;
       
+      console.log('Tentando adicionar jogador:', { nome, apelido, celular, user_id });
+
       const { data, error } = await supabase
         .from('players')
         .insert([{
@@ -45,6 +55,8 @@ export const playerService = {
         console.error('Erro ao adicionar jogador:', error);
         throw error;
       }
+
+      console.log('Jogador adicionado com sucesso:', data[0]);
       return data[0];
     } catch (error) {
       console.error('Erro ao processar dados do jogador:', error);
@@ -54,9 +66,15 @@ export const playerService = {
 
   async updatePlayer(id, playerData) {
     try {
+      // Validar dados
+      if (!id) throw new Error('ID é obrigatório');
+      if (!playerData.nome) throw new Error('Nome é obrigatório');
+
       // Garantir que temos os campos corretos
-      const { nome, apelido, celular } = playerData;
+      const { nome, apelido = null, celular = null } = playerData;
       
+      console.log('Tentando atualizar jogador:', { id, nome, apelido, celular });
+
       const { data, error } = await supabase
         .from('players')
         .update({
@@ -71,6 +89,8 @@ export const playerService = {
         console.error('Erro ao atualizar jogador:', error);
         throw error;
       }
+
+      console.log('Jogador atualizado com sucesso:', data[0]);
       return data[0];
     } catch (error) {
       console.error('Erro ao processar atualização do jogador:', error);
@@ -79,6 +99,8 @@ export const playerService = {
   },
 
   async deletePlayer(id) {
+    if (!id) throw new Error('ID é obrigatório');
+
     const { error } = await supabase
       .from('players')
       .delete()
