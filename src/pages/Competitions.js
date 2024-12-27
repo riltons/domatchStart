@@ -24,7 +24,7 @@ function Competitions() {
     try {
       setLoading(true);
       const [competitionsData, playersData] = await Promise.all([
-        competitionService.getCompetitions(),
+        competitionService.getCompetitionsByUser(user.id),
         playerService.getPlayers()
       ]);
       setCompetitions(competitionsData);
