@@ -14,6 +14,10 @@ export const competitionService = {
   },
 
   async getCompetitionsByUser(userId) {
+    if (!userId) {
+      throw new Error('userId é obrigatório');
+    }
+
     const { data, error } = await supabase
       .from('competitions')
       .select('*')
@@ -27,40 +31,68 @@ export const competitionService = {
   },
 
   async addCompetition(competitionData) {
-    const { data, error } = await supabase
-      .from('competitions')
-      .insert([{
-        ...competitionData,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }])
-      .select();
-    
-    if (error) {
-      console.error('Erro ao adicionar competição:', error);
+    try {
+      // Validar dados
+      if (!competitionData.nome) throw new Error('Nome é obrigatório');
+      if (!competitionData.user_id) throw new Error('user_id é obrigatório');
+
+      console.log('Tentando adicionar competição:', competitionData);
+
+      const { data, error } = await supabase
+        .from('competitions')
+        .insert([{
+          ...competitionData,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }])
+        .select();
+      
+      if (error) {
+        console.error('Erro ao adicionar competição:', error);
+        throw error;
+      }
+
+      console.log('Competição adicionada com sucesso:', data[0]);
+      return data[0];
+    } catch (error) {
+      console.error('Erro ao processar dados da competição:', error);
       throw error;
     }
-    return data[0];
   },
 
   async updateCompetition(id, competitionData) {
-    const { data, error } = await supabase
-      .from('competitions')
-      .update({
-        ...competitionData,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', id)
-      .select();
-    
-    if (error) {
-      console.error('Erro ao atualizar competição:', error);
+    try {
+      // Validar dados
+      if (!id) throw new Error('ID é obrigatório');
+      if (!competitionData.nome) throw new Error('Nome é obrigatório');
+
+      console.log('Tentando atualizar competição:', { id, ...competitionData });
+
+      const { data, error } = await supabase
+        .from('competitions')
+        .update({
+          ...competitionData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select();
+      
+      if (error) {
+        console.error('Erro ao atualizar competição:', error);
+        throw error;
+      }
+
+      console.log('Competição atualizada com sucesso:', data[0]);
+      return data[0];
+    } catch (error) {
+      console.error('Erro ao processar atualização da competição:', error);
       throw error;
     }
-    return data[0];
   },
 
   async deleteCompetition(id) {
+    if (!id) throw new Error('ID é obrigatório');
+
     const { error } = await supabase
       .from('competitions')
       .delete()
